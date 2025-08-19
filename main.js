@@ -4,7 +4,7 @@ import { initHud, updateHud } from './overlay.js';
 //import { resize } from './Resize.js';
 //import { initThreeJS, resizeThreeJS } from './threeInit.js';
 import { initGolyoInstancedMesh, updateGolyoInstancedMesh } from './golyoInstanced.js';
-import { initSpecialMeshes, updateSpecialMeshes } from './specialMeshes.js';
+//import { initSpecialMeshes, updateSpecialMeshes } from './specialMeshes.js';
 //import { initLines } from './line.js';
 import { golyo_init } from './golyo.js';
 import { szamol } from './Physics.js';
