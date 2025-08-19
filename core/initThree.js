@@ -1,17 +1,13 @@
 // core/initThree.js
 import * as THREE from 'three';
-import { state, setThree, setDom } from './state.js';
+import { state, allapot, setThree, setDom } from './state.js';
 
 export function initThree({ canvas, container, fov = 60, near = 0.1, far = 2000 }) {
   if (!canvas && !container) {
     throw new Error('initThree: legalább canvas vagy container szükséges.');
   }
-
   // DOM referenciák
   setDom({ canvas, container });
-
-  const host = container ?? canvas;
-
   // Renderer
   const renderer = new THREE.WebGLRenderer({
     canvas: canvas ?? undefined,
@@ -22,7 +18,7 @@ export function initThree({ canvas, container, fov = 60, near = 0.1, far = 2000 
     depth: true,
     preserveDrawingBuffer: false,
   });
-  
+
   if (!canvas && container) {
     container.appendChild(renderer.domElement);
   }
@@ -36,18 +32,18 @@ export function initThree({ canvas, container, fov = 60, near = 0.1, far = 2000 
   // Árnyékok – ha nem kell, maradhat kikapcsolva
   renderer.shadowMap.enabled = false;
   // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
+  const host = container ?? canvas ?? renderer.domElement.parentElement ?? document.body;
   // DPR és méret
   const dpr = globalThis.devicePixelRatio || 1;
   renderer.setPixelRatio(dpr);
 
-  const w = host.clientWidth || 0;
-  const h = host.clientHeight || 0;
+  const w = host.clientWidth  || globalThis.innerWidth  || 1;
+  const h = host.clientHeight || globalThis.innerHeight || 1;
   renderer.setSize(w, h, false);
 
   // Kamera + szcéna
   const camera = new THREE.PerspectiveCamera(fov, (w || 1) / Math.max(1, h), near, far);
-  camera.position.set(0, 0, 10);
+  camera.position.set(0, 0, allapot.tavolsag);
 
   const scene = new THREE.Scene();
   // scene.background = new THREE.Color(0x000000); // ha kell háttér
@@ -69,9 +65,16 @@ export function onResize() {
   const { renderer, camera, container, canvas } = state;
   if (!renderer || !camera) return;
 
-  const host = container ?? canvas;
-  const w = host?.clientWidth ?? 0;
-  const h = host?.clientHeight ?? 0;
+  const host = container ?? canvas ?? renderer.domElement.parentElement ?? document.body;
+  
+  // DPR változás (mobil zoom/orientáció)
+  const dpr = globalThis.devicePixelRatio || 1;
+  if (renderer.getPixelRatio() !== dpr) {
+    renderer.setPixelRatio(dpr);
+  }
+
+  const w = host?.clientWidth  || globalThis.innerWidth  || 1;
+  const h = host?.clientHeight || globalThis.innerHeight || 1;
 
   camera.aspect = (w || 1) / Math.max(1, h);
   camera.updateProjectionMatrix();
@@ -79,4 +82,5 @@ export function onResize() {
 
   state.width = w;
   state.height = h;
+  state.dpr = dpr;
 }

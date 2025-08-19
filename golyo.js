@@ -1,3 +1,5 @@
+import { allapot } from './core/state.js';
+
 export class Golyo {
   constructor() {
     this.x = 0;
@@ -16,7 +18,8 @@ export class Golyo {
     this.Fz = 0;
   }
 }
-export let golyok = [];
+
+export let golyok = [], szalhossz = [], specialGolyok = [], kozpont, eger ;
 
 export function golyo_init() {
   golyok.length = 0;
@@ -27,7 +30,7 @@ export function golyo_init() {
     let a = Math.random() - 0.5;
     let b = Math.random() - 0.5;
     let c = Math.random() - 0.5;
-    let k = hossz / Math.sqrt(a * a + b * b + c * c);
+    let k = 50 / Math.sqrt(a * a + b * b + c * c);
     golyok[i].x = k * a;
     golyok[i].y = k * b;
     golyok[i].z = k * c;

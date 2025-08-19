@@ -3,9 +3,7 @@ const ctx = canvas.getContext("2d");
 const wrapper = document.getElementById('fullscreen-wrapper');
 let scene=null, camera=null, renderer=null, container=null;
 let threeCamera=null, cameraControls=null;
-let golyoInstancedMesh = null;
-let golyoGeometry = null;
-let golyoMaterial = null;
+
 let linesMesh = null;
 let rafId = null, running = false, _ctxLossHandlersAttached = false;
 

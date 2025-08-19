@@ -1,13 +1,18 @@
+import * as THREE from 'three';
+import { state } from './core/state.js';
+import { golyok, kozpont, szalhossz } from './golyo.js';
+let linesMesh;
+
 export function initLines() {
   if (linesMesh) {
-    scene.remove(linesMesh);
+    state.scene.remove(linesMesh);
     linesMesh.geometry.dispose();
     linesMesh.material.dispose();
   }
   const geometry = new THREE.BufferGeometry();
-  const positions = new Float32Array(MAX_GOLYO * 2 * 3); // 2 pont/golyó, 3 koordináta/pont
+  const positions = new Float32Array(state.MAX_GOLYO * 2 * 3); // 2 pont/golyó, 3 koordináta/pont
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const colors = new Float32Array(MAX_GOLYO * 2 * 3); // RGB minden ponthoz 
+  const colors = new Float32Array(state.MAX_GOLYO * 2 * 3); // RGB minden ponthoz 
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   const material = new THREE.LineBasicMaterial({
     vertexColors: true, // <- fontos!
@@ -15,7 +20,7 @@ export function initLines() {
     opacity: 0.8
   });
   linesMesh = new THREE.LineSegments(geometry, material);
-  scene.add(linesMesh);
+  state.scene.add(linesMesh);
 }
 
 export function updateLines() {

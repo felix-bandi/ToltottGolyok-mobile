@@ -1,3 +1,8 @@
+import * as THREE from 'three';
+import { state, allapot } from './core/state.js';
+import { golyok, kozpont, eger } from './golyo.js';
+let kozpontMesh, egerMesh;
+
 export function initSpecialMeshes() {
   // Központ golyó mesh (zöld, MeshPhongMaterial árnyékolással)
   if (kozpontMesh) {
@@ -10,7 +15,7 @@ export function initSpecialMeshes() {
   kozpontMesh = new THREE.Mesh(kozpontGeometry, kozpontMaterial);
   kozpontMesh.castShadow = true;
   kozpontMesh.receiveShadow = true;
-  scene.add(kozpontMesh);
+  state.scene.add(kozpontMesh);
 
   if (egerMesh) {
     scene.remove(egerMesh);
@@ -22,7 +27,7 @@ export function initSpecialMeshes() {
   egerMesh = new THREE.Mesh(egerGeometry, egerMaterial);
   egerMesh.castShadow = true;
   egerMesh.receiveShadow = true;
-  scene.add(egerMesh);
+  state.scene.add(egerMesh);
 }
 
 export function updateSpecialMeshes() {

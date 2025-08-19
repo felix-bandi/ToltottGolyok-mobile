@@ -1,8 +1,15 @@
+import * as THREE from 'three';
+import { state, allapot } from './core/state.js';
+import { golyok, kozpont, eger } from './golyo.js';
 
+let golyoInstancedMesh = null;
+let golyoGeometry = null;
+let golyoMaterial = null;
+let golyoszin = 0xFF8040; // Alapértelmezett szín
 
 export function initGolyoInstancedMesh() {
   if (golyoInstancedMesh) {
-    scene.remove(golyoInstancedMesh);
+    state.scene.remove(golyoInstancedMesh);
     golyoInstancedMesh.dispose();
   }
   if (golyoGeometry) {
@@ -22,20 +29,20 @@ export function initGolyoInstancedMesh() {
     transmission: 0.0,
     ior: 1.5
   });
-  golyoInstancedMesh = new THREE.InstancedMesh(golyoGeometry, golyoMaterial, MAX_GOLYO);
+  golyoInstancedMesh = new THREE.InstancedMesh(golyoGeometry, golyoMaterial, state.MAX_GOLYO);
 
-  scene.add(golyoInstancedMesh);
+  state.scene.add(golyoInstancedMesh);
   kozpont.toltes = allapot.kozpont;
   eger.toltes = allapot.eger;
-  tolt2 = allapot.toltes * allapot.toltes;
+  
   eger.z = allapot.eger_z;
   const r = 0;
-  const g = allapot.toltes / toltesMax * 255;
-  const b = allapot.toltes / toltesMax * 80;
+  const g = allapot.toltes / state.MAX_GOLYO * 255;
+  const b = allapot.toltes / state.MAX_GOLYO * 80;
   golyoszin = (r << 16) | (g << 8) | b;
-  camera.fov = allapot.fov;
-  camera.position.set(0, 0, allapot.tavolsag);
-  camera.updateProjectionMatrix();
+  state.camera.fov = allapot.fov;
+  state.camera.position.set(0, 0, allapot.tavolsag);
+  state.camera.updateProjectionMatrix();
 }
 
 export function updateGolyoInstancedMesh() {

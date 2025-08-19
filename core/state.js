@@ -12,7 +12,10 @@ export const state = {
   dpr: 1,
   width: 0,
   height: 0,
+
+  MAX_GOLYO: 500 // max golyók száma
 };
+
 
 export const allapot = {
   N: 100,        
@@ -24,7 +27,7 @@ export const allapot = {
   eger: 100,
   eger_z: 0,
   fov: 75,
-  tavolsag: 500
+  tavolsag: 160
 };
 
 // opcionális getter/setterek, ha szeretnéd kontrollálni a beállítást:
