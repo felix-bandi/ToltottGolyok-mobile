@@ -2,23 +2,31 @@
 <html lang="hu">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Töltött golyók – mobil</title>
   <style>
-    html, body { margin:0; padding:0; height:100%; overflow:hidden; } /* NINCS scrollbar */
-    canvas { display:block; touch-action:none; } /* ne görgessen, ne zoomoljon */
+    html,body{height:100%;margin:0}
+    body{background:#101012;overflow:hidden;touch-action:none}
+    #app{position:fixed;inset:0}
+    #hud{position:fixed;top:8px;left:8px;z-index:9999;color:#ddd;background:rgba(0,0,0,.35);
+         padding:6px 8px;border-radius:8px;font:12px/1.3 system-ui,Segoe UI,Roboto,Arial,sans-serif;
+         pointer-events:none;user-select:none}
   </style>
+
+  <!-- vendor a webgyökér testvérmappájában -->
   <script type="importmap">
   {
     "imports": {
-      "three": "/vendor/three.module.js"
+      "three": "/vendor/three.js-r179/build/three.module.js"
     }
   }
   </script>
 </head>
 <body>
-  <canvas id="gl"></canvas>
-  <script type="module" src="./init.js"></script>
+  <div id="app"></div>
+  <div id="hud">FPS: <b id="fps">–</b>&nbsp;&nbsp;Golyók: <b id="balls">–</b></div>
+
+  <!-- az egész app külön fájlba költözött -->
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
-
