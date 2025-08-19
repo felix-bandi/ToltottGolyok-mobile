@@ -22,7 +22,10 @@ export function initThree({ canvas, container, fov = 60, near = 0.1, far = 2000 
     depth: true,
     preserveDrawingBuffer: false,
   });
-
+  
+  if (!canvas && container) {
+    container.appendChild(renderer.domElement);
+  }
   // Színmenedzsment / tone mapping (modern Three)
   // Ha régebbi Three-t használsz, lehet hogy outputEncoding kell:
   // renderer.outputEncoding = THREE.sRGBEncoding;
