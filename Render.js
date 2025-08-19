@@ -9,7 +9,7 @@ let golyoMaterial = null;
 let linesMesh = null;
 let rafId = null, running = false, _ctxLossHandlersAttached = false;
 
-function cleanup() {
+export function cleanup() {
   console.log("🧹 Cleanup indul...");
 
   // --- Render loop leállítás ---
@@ -101,7 +101,7 @@ function cleanup() {
   console.log("✅ Cleanup kész");
 }
 
-function cleanupLight() {
+export function cleanupLight() {
   try {
     // 1) loop leáll
     if (typeof stopLoop === 'function') stopLoop();

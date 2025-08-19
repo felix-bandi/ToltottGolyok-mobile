@@ -1,4 +1,4 @@
-function initSpecialMeshes() {
+export function initSpecialMeshes() {
   // Központ golyó mesh (zöld, MeshPhongMaterial árnyékolással)
   if (kozpontMesh) {
     scene.remove(kozpontMesh);
@@ -25,7 +25,7 @@ function initSpecialMeshes() {
   scene.add(egerMesh);
 }
 
-function updateSpecialMeshes() {
+export function updateSpecialMeshes() {
   if (kozpontMesh && kozpont) {
     kozpontMesh.position.set(kozpont.x, kozpont.y, kozpont.z);
   }

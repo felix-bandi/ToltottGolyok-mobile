@@ -1,4 +1,4 @@
-function initThreeJS() {
+export function initThreeJS() {
   container = document.getElementById('container');
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000011);
@@ -33,7 +33,7 @@ function initThreeJS() {
   scene.add(directionalLight);
 }
 
-function resizeThreeJS() {
+export function resizeThreeJS() {
    if (!camera || !renderer) return;
 
   // 1) a renderer canvasa továbbra is a teljes ablakot követi

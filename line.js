@@ -1,4 +1,4 @@
-function initLines() {
+export function initLines() {
   if (linesMesh) {
     scene.remove(linesMesh);
     linesMesh.geometry.dispose();
@@ -18,7 +18,7 @@ function initLines() {
   scene.add(linesMesh);
 }
 
-function updateLines() {
+export function updateLines() {
   if (!linesMesh) initLines();
   const positions = linesMesh.geometry.attributes.position.array;
   const colors = linesMesh.geometry.attributes.color.array;

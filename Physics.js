@@ -9,7 +9,7 @@ let eger    = { x: 0, y: 0, z: 0, toltes: 0, szin: 0 };
 
 
 
-function szamol(korrekcio) {
+export function szamol(korrekcio) {
   let a, b, c, k;
   const N = Math.round(1999 * Math.pow(allapot.N / MAX_GOLYO, 2) + 1);
   const prevN = golyok.length;
@@ -124,38 +124,3 @@ function szamol(korrekcio) {
     g.z += g.vz;
   }
 }
-
-function updateLines() {
-  if (!linesMesh) initLines();
-  const positions = linesMesh.geometry.attributes.position.array;
-  const colors = linesMesh.geometry.attributes.color.array;
-  for (let i = 0; i < golyok.length; i++) {
-    const x1 = kozpont.x, y1 = kozpont.y, z1 = kozpont.z;
-    const x2 = golyok[i].x, y2 = golyok[i].y, z2 = golyok[i].z;
-    positions[i * 6 + 0] = x1;
-    positions[i * 6 + 1] = y1;
-    positions[i * 6 + 2] = z1;
-    positions[i * 6 + 3] = x2;
-    positions[i * 6 + 4] = y2;
-    positions[i * 6 + 5] = z2;
-
-    // Vonalhossz
-    const dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
-    szalhossz[i] = Math.sqrt(dx * dx + dy * dy + dz * dz);
-  }
-  for (let i = 0; i < golyok.length; i++) {
-    const L = szalhossz[i];
-    const r = Math.min(1, L / 500), g = 0.5, b = 0;
-    colors[i * 6 + 0] = r;
-    colors[i * 6 + 1] = g;
-    colors[i * 6 + 2] = b;
-    colors[i * 6 + 3] = r;
-    colors[i * 6 + 4] = g;
-    colors[i * 6 + 5] = b;
-  }
-  linesMesh.count = golyok.length;
-  linesMesh.geometry.setDrawRange(0, golyok.length * 2);
-  linesMesh.geometry.attributes.position.needsUpdate = true;
-  linesMesh.geometry.attributes.color.needsUpdate = true;
-}
-

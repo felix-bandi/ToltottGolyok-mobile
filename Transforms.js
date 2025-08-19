@@ -1,4 +1,4 @@
-function getCanvasCoordsFrom3D() {
+export function getCanvasCoordsFrom3D() {
   if (!camera || !renderer || !eger) return { x: 0, y: 0 };  // <<< GUARD
   const v = new THREE.Vector3(eger.x, eger.y, eger.z).project(camera);
   const rect = renderer.domElement.getBoundingClientRect();
@@ -17,7 +17,7 @@ function getCanvasCoordsFrom3D() {
   };
 }
 
-function worldToScreen(pos) {
+export function worldToScreen(pos) {
   if (!camera || !renderer) return { x: 0, y: 0 };  // <<< GUARD
   const v = pos.clone().project(camera);
   const rect = renderer.domElement.getBoundingClientRect();
@@ -35,7 +35,7 @@ function worldToScreen(pos) {
   };
 }
 
-function screenTo3DWithZ(clientX, clientY, zVilag, camera, canvas) {
+export function screenTo3DWithZ(clientX, clientY, zVilag, camera, canvas) {
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
   const vp = getViewportRect();

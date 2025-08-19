@@ -17,7 +17,7 @@ class Golyo {
   }
 }
 
-function golyo_init() {
+export function golyo_init() {
   golyok.length = 0;
   szalhossz.length = 0;
   specialGolyok.length = 0;

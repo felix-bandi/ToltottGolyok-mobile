@@ -1,6 +1,6 @@
 
 
-function initGolyoInstancedMesh() {
+export function initGolyoInstancedMesh() {
   if (golyoInstancedMesh) {
     scene.remove(golyoInstancedMesh);
     golyoInstancedMesh.dispose();
@@ -38,7 +38,7 @@ function initGolyoInstancedMesh() {
   camera.updateProjectionMatrix();
 }
 
-function updateGolyoInstancedMesh() {
+export function updateGolyoInstancedMesh() {
   //console.log("golyok.length =", golyok.length);
   for (let i = 0; i < golyok.length; ++i) {
     const g = golyok[i];
