@@ -1,4 +1,10 @@
-let BAL_ARANY = 0.60; // tartalék, ha scrollBar_left nem elérhető
+
+function resize(){
+  const w = container.clientWidth, h = container.clientHeight || 1;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
 
 function getViewportRect() {
   // teljes belső pixelméret (renderer canvas)
@@ -36,44 +42,4 @@ function applyViewportAndCamera() {
     cameraControls.target.set(kozpont.x, kozpont.y, kozpont.z);
     cameraControls.update();
   }
-}
-
-function meretez() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  scrollBar_width = canvas.width / 4;
-  scrollBar_left = canvas.width - scrollBar_width * 1.1;
-
-  // Az origo a bal fekete rész közepére - scrollBar_left a jobb szélét jelöli
-  //origo.x = scrollBar_left / 2;  // A bal fekete rész közepére
-  //origo.y = canvas.height / 2;
-
-  const rect = canvas.getBoundingClientRect();
-  const m = rect.height / 12;
-  const o = (rect.height - m) / scrollStructs.length;
-
-  scrollBars.forEach((sb, i) => {
-    let top = o * (i + 0.5);
-    let left = scrollBar_left;
-    let bottom = top + m;
-    let right = scrollBar_left + scrollBar_width;
-    sb.meretez(left, right, top, bottom);
-  });
-
-  resizeThreeJS();
-}
-
-function resizeThreeJS() {
-   if (!camera || !renderer) return;
-
-  // 1) a renderer canvasa továbbra is a teljes ablakot követi
-  const threeW = window.innerWidth;
-  const threeH = window.innerHeight;
-  renderer.setSize(threeW, threeH); // CSS + belső méret frissül
-
-  // 2) viewport + aspect a bal sávhoz igazítva
-  applyViewportAndCamera();
-
-  // opcionális: egy render itt, hogy azonnal frissüljön
-  renderer.render(scene, camera);
 }
