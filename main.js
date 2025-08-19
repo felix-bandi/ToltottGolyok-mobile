@@ -17,7 +17,9 @@ function tick(t) {
 
   szamol(korrekcio);
   updateGolyoInstancedMesh();
-
+  updateSpecialMeshes();
+  updateLines();
+  
   frameEnd(t);
   updateHud({ fps: getFps(), balls: ballsCount });
   requestAnimationFrame(tick); 
@@ -29,5 +31,7 @@ golyo_init();
 initGolyoInstancedMesh();
 initSpecialMeshes();
 initLines();
-updateGolyoInstancedMesh();
 resizeThreeJS();
+updateGolyoInstancedMesh();
+updateSpecialMeshes();
+updateLines();

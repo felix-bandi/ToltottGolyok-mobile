@@ -1,3 +1,5 @@
+
+
 function initGolyoInstancedMesh() {
   if (golyoInstancedMesh) {
     scene.remove(golyoInstancedMesh);
@@ -55,6 +57,4 @@ function updateGolyoInstancedMesh() {
   golyoInstancedMesh.count = golyok.length;
   golyoInstancedMesh.instanceMatrix.needsUpdate = true;
   golyoMaterial.color.setHex(golyoszin); // Alapértelmezett szín
-  updateSpecialMeshes();
-  updateLines();
 }

@@ -9,14 +9,6 @@ let golyoMaterial = null;
 let linesMesh = null;
 let rafId = null, running = false, _ctxLossHandlersAttached = false;
 
-
-
-
-
-
-
-
-
 function cleanup() {
   console.log("🧹 Cleanup indul...");
 
