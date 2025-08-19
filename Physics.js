@@ -3,18 +3,19 @@ const INDUL_GOLYO = 100;
 const MAX_GOLYO = 2000;
 let golyomax = MAX_GOLYO;
 let hossz = 50; // Csökkentve a jobb láthatóság érdekében
-let golyok = [], szalhossz = [], specialGolyok = [];
+let szalhossz = [], specialGolyok = [];
 let kozpont = { x: 0, y: 0, z: 0, toltes: 0, szin: 0 };
 let eger    = { x: 0, y: 0, z: 0, toltes: 0, szin: 0 };
 
-
+import { allapot } from './core/state.js';
+import { Golyo, golyok } from './golyo.js';
 
 export function szamol(korrekcio) {
   let a, b, c, k;
   const N = Math.round(1999 * Math.pow(allapot.N / MAX_GOLYO, 2) + 1);
   const prevN = golyok.length;
   let LL = 0, valid;
-
+  const tolt2 = allapot.toltes * allapot.toltes;
   if (N < prevN) {
     golyok.splice(N);
   }

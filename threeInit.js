@@ -1,3 +1,4 @@
+
 export function initThreeJS() {
   container = document.getElementById('container');
   scene = new THREE.Scene();

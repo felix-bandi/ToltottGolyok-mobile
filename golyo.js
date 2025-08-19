@@ -1,11 +1,11 @@
-class Golyo {
+export class Golyo {
   constructor() {
     this.x = 0;
     this.y = 0;
     this.z = 500;
 
     this.r = 10;
-    this.szin = szin;
+    this.szin = "yellow";
 
     this.vx = 0;
     this.vy = 0;
@@ -16,6 +16,7 @@ class Golyo {
     this.Fz = 0;
   }
 }
+export let golyok = [];
 
 export function golyo_init() {
   golyok.length = 0;
