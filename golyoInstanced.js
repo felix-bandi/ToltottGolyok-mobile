@@ -19,15 +19,9 @@ export function initGolyoInstancedMesh() {
     golyoMaterial.dispose();
   }
   golyoGeometry = new THREE.SphereGeometry(10, 16, 16);
-  golyoMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xff8040,
-    metalness: 0.7,
-    roughness: 0.3,
-    clearcoat: 0.5,
-    clearcoatRoughness: 0.1,
-    reflectivity: 0.8,
-    transmission: 0.0,
-    ior: 1.5
+  golyoMaterial = new THREE.MeshBasicMaterial({
+    color: golyoszin,
+    //transparent: true,
   });
   golyoInstancedMesh = new THREE.InstancedMesh(golyoGeometry, golyoMaterial, state.MAX_GOLYO);
 

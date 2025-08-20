@@ -1,6 +1,4 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const wrapper = document.getElementById('fullscreen-wrapper');
+// ...existing code...
 let scene=null, camera=null, renderer=null, container=null;
 let threeCamera=null, cameraControls=null;
 
@@ -77,12 +75,7 @@ export function cleanup() {
   camera = null;
   scene = null;
 
-  // --- Canvas 2D context törlés ---
-  if (ctx && canvas) {
-    const rect = canvas.getBoundingClientRect();
-    ctx.clearRect(0, 0, rect.width, rect.height);
-    // (opcionális) buffer reset: canvas.width = canvas.width;
-  }
+  // ...canvas 2D context törlés eltávolítva...
 
   // --- Egyéb globálisok safe default ---
   korrekcio = 0;

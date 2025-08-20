@@ -35,8 +35,8 @@ export function worldToScreen(pos) {
   };
 }
 
-export function screenTo3DWithZ(clientX, clientY, zVilag, camera, canvas) {
-  const rect = canvas.getBoundingClientRect();
+export function screenTo3DWithZ(clientX, clientY, zVilag, camera, renderer) {
+  const rect = renderer.domElement.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
   const vp = getViewportRect();
 
@@ -57,3 +57,4 @@ export function screenTo3DWithZ(clientX, clientY, zVilag, camera, canvas) {
   const pont = new THREE.Vector3();
   raycaster.ray.intersectPlane(plane, pont);
   return pont;
+}

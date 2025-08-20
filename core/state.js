@@ -5,7 +5,6 @@ export const state = {
   renderer: null,
 
   // DOM
-  canvas: null,
   container: null,
 
   // hasznos: DPR és méretek cache-elése
@@ -22,8 +21,8 @@ export const allapot = {
   csill: 0.98,
   tomeg: 3,
   toltes: 4,
-  D: 0.01,
-  kozpont: 100,
+  D: 0.001,
+  kozpont: 500,
   eger: 100,
   eger_z: 0,
   fov: 75,
@@ -37,7 +36,6 @@ export const setThree = ({ scene, camera, renderer }) => {
   if (renderer) state.renderer = renderer;
 };
 
-export const setDom = ({ canvas, container }) => {
-  if (canvas) state.canvas = canvas;
+export const setDom = ({ container }) => {
   if (container) state.container = container;
 };

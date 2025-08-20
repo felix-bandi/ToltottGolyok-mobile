@@ -9,13 +9,16 @@ import { golyo_init, golyok } from './golyo.js';
 import { szamol } from './Physics.js';
 import { initThree, onResize } from './core/initThree.js';
 import { state } from './core/state.js';
+import { attachTouchControls } from './input/touch.js';
+//import { applyViewportAndCamera } from './Resize.js';
 
-const canvas = document.getElementById('glcanvas');
 const container = document.getElementById('main');
-
-initThree({ canvas, container });
+initThree({ container });
 const { scene, camera, renderer } = state;
+attachTouchControls(renderer.domElement, camera);
+
 onResize();
+//applyViewportAndCamera();
 initHud();
 //let ballsCount = 1;
 golyo_init();
@@ -38,15 +41,28 @@ function tick(t) {
   // ennyiszer léptetjük a fizikát fix lépéssel
   let steps = 0;
   while (acc >= FIXED_DT_SEC && steps < MAX_STEPS) {
-    
-    szamol(1);                 // <<— itt eddig korrekcio ment, most FIX: 1
+    szamol(1);
     acc   -= FIXED_DT_SEC;
     steps += 1;
   }
-  
-  updateGolyoInstancedMesh();
+
   updateSpecialMeshes();
   updateLines();
+
+  // DEBUG INFO KIÍRÁS
+  let debug = document.getElementById('debug');
+  if (!debug) {
+    debug = document.createElement('pre');
+    debug.id = 'debug';
+    debug.style.cssText = 'position:fixed;bottom:0;left:0;z-index:99999;background:rgba(0,0,0,0.7);color:#fff;font-size:12px;padding:6px;max-width:100vw;max-height:40vh;overflow:auto;pointer-events:none;';
+    document.body.appendChild(debug);
+  }
+  debug.textContent =
+    `camera.position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}\n` +
+    `camera.aspect: ${camera.aspect.toFixed(3)}\n` +
+    `renderer size: ${renderer.domElement.width} x ${renderer.domElement.height}\n` +
+    `container size: ${container.clientWidth} x ${container.clientHeight}\n` +
+    `kozpont: ${golyok.length > 0 ? `${golyok[0].x.toFixed(2)}, ${golyok[0].y.toFixed(2)}, ${golyok[0].z.toFixed(2)}` : 'n/a'}\n`;
 
   renderer.render(scene, camera);
   frameEnd(t);
