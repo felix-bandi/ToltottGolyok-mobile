@@ -6,7 +6,7 @@ let kozpontMesh, egerMesh;
 export function initSpecialMeshes() {
   // Központ golyó mesh (zöld, MeshPhongMaterial árnyékolással)
   if (kozpontMesh) {
-    scene.remove(kozpontMesh);
+    state.scene.remove(kozpontMesh);
     kozpontMesh.geometry.dispose();
     kozpontMesh.material.dispose();
   }
@@ -18,7 +18,7 @@ export function initSpecialMeshes() {
   state.scene.add(kozpontMesh);
 
   if (egerMesh) {
-    scene.remove(egerMesh);
+    state.scene.remove(egerMesh);
     egerMesh.geometry.dispose();
     egerMesh.material.dispose();
   }

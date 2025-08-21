@@ -5,12 +5,12 @@ import { golyok, kozpont, eger } from './golyo.js';
 let golyoInstancedMesh = null;
 let golyoGeometry = null;
 let golyoMaterial = null;
-let golyoszin = 0xFF8040; // Alapértelmezett szín
+let golyoszin = 0xFFffff; // Alapértelmezett szín
 
 export function initGolyoInstancedMesh() {
   if (golyoInstancedMesh) {
     state.scene.remove(golyoInstancedMesh);
-    golyoInstancedMesh.dispose();
+    //golyoInstancedMesh.dispose();
   }
   if (golyoGeometry) {
     golyoGeometry.dispose();
@@ -19,10 +19,14 @@ export function initGolyoInstancedMesh() {
     golyoMaterial.dispose();
   }
   golyoGeometry = new THREE.SphereGeometry(10, 16, 16);
-  golyoMaterial = new THREE.MeshBasicMaterial({
-    color: golyoszin,
-    //transparent: true,
-  });
+  golyoMaterial = new THREE.MeshPhysicalMaterial({
+  color: golyoszin,
+  roughness: 0.1,
+  metalness: 0.0,
+  clearcoat: 0.5,
+  clearcoatRoughness: 0.1,
+  reflectivity: 1.0,
+});
   golyoInstancedMesh = new THREE.InstancedMesh(golyoGeometry, golyoMaterial, state.MAX_GOLYO);
 
   state.scene.add(golyoInstancedMesh);

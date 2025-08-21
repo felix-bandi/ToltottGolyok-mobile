@@ -1,5 +1,5 @@
 // ...existing code...
-let scene=null, camera=null, renderer=null, container=null;
+let scene=null, camera=null, renderer=null;
 let threeCamera=null, cameraControls=null;
 
 let linesMesh = null;

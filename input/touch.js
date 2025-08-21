@@ -66,7 +66,7 @@ export function attachTouchControls(element, camera, {
     }
   }
 
-  function onTouchEnd() {
+  function onTouchEnd(e) {
     if (e.touches?.length === 0) {
       isDown = false;
       startPinchDist = 0;

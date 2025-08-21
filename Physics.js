@@ -12,15 +12,15 @@ import { Golyo, golyok, specialGolyok } from './golyo.js';
 
 export function szamol(korrekcio) {
   let a, b, c, k;
-  const N = Math.round((state.MAX_GOLYO - 23) * Math.pow(allapot.N / state.MAX_GOLYO, 2) + 1);
+  //const N = Math.round((state.MAX_GOLYO - 23) * Math.pow(allapot.N / state.MAX_GOLYO, 2) + 1);
   const prevN = golyok.length;
   let LL = 0, valid;
   const tolt2 = allapot.toltes * allapot.toltes;
-  if (N < prevN) {
-    golyok.splice(N);
+  if (allapot.N < prevN) {
+    golyok.splice(allapot.N);
   }
 
-  if (N > prevN) {
+  if (allapot.N > prevN) {
 
     for (let i = 0; i < prevN; ++i) {
       const Lx = 0 - golyok[i].x;

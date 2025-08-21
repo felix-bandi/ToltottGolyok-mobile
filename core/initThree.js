@@ -7,7 +7,8 @@ export function initThree({ container, fov = 60, near = 0.1, far = 2000 }) {
   if (!container) {
     throw new Error('initThree: container szükséges.');
   }
-  setDom({ container });
+  state.container = container;
+  setDom({ container: state.container });
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: false,
@@ -16,7 +17,7 @@ export function initThree({ container, fov = 60, near = 0.1, far = 2000 }) {
     depth: true,
     preserveDrawingBuffer: false,
   });
-  container.appendChild(renderer.domElement);
+  state.container.appendChild(renderer.domElement);
   // Színmenedzsment / tone mapping (modern Three)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -25,13 +26,12 @@ export function initThree({ container, fov = 60, near = 0.1, far = 2000 }) {
   // Árnyékok – ha nem kell, maradhat kikapcsolva
   renderer.shadowMap.enabled = false;
   // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  const host = container;
   // DPR és méret
-  const dpr = globalThis.devicePixelRatio || 1;
+  const dpr = Math.min(2, globalThis.devicePixelRatio || 1);
   renderer.setPixelRatio(dpr);
 
-  const w = host.clientWidth  || globalThis.innerWidth  || 1;
-  const h = host.clientHeight || globalThis.innerHeight || 1;
+  const w = state.container.clientWidth || globalThis.innerWidth || 1;
+  const h = state.container.clientHeight || globalThis.innerHeight || 1;
   renderer.setSize(w, h, false);
 
   // Kamera + szcéna
@@ -39,7 +39,12 @@ export function initThree({ container, fov = 60, near = 0.1, far = 2000 }) {
   camera.position.set(0, 0, allapot.tavolsag ?? 500);
   camera.lookAt(0, 0, 0);
   const scene = new THREE.Scene();
+  const ambient = new THREE.AmbientLight(0xffffff, 1); // fehér, fél erősségű
+  scene.add(ambient);
 
+  const directional = new THREE.DirectionalLight(0xffffff, 2);
+  directional.position.set(100, 100, 100);
+  scene.add(directional);
   // Állapot frissítése
   state.dpr = dpr;
   state.width = w;
@@ -57,12 +62,11 @@ export function onResize() {
   const { renderer, camera, container } = state;
   if (!renderer || !camera) return;
 
-  const host = container;
   // DPR változás (mobil zoom/orientáció)
   const dpr = Math.min(2, globalThis.devicePixelRatio || 1);
   renderer.setPixelRatio(dpr);
-  const w = host?.clientWidth  || globalThis.innerWidth  || 1;
-  const h = host?.clientHeight || globalThis.innerHeight || 1;
+  const w = state.container?.clientWidth || globalThis.innerWidth || 1;
+  const h = state.container?.clientHeight || globalThis.innerHeight || 1;
 
   camera.aspect = (w || 1) / Math.max(1, h);
   camera.updateProjectionMatrix();

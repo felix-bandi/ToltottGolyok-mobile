@@ -12,14 +12,14 @@ function getViewportRect() {
 
 export function applyViewportAndCamera() {
   if (!state.renderer || !state.camera) return;
-  const vp = getViewportRect();
+  //const vp = getViewportRect();
 
-  state.renderer.setViewport(0, 0, state.renderer.domElement.width, state.renderer.domElement.height);
-  state.renderer.setScissor(0, 0, state.renderer.domElement.width, state.renderer.domElement.height);
+  const w = state.container?.clientWidth || 1;
+  const h = state.container?.clientHeight || 1;
+  state.renderer.setViewport(0, 0, w, h);
+  state.renderer.setScissor(0, 0, w, h);
   state.renderer.setScissorTest(false);
 
-  const w = state.renderer.domElement.width;
-  const h = state.renderer.domElement.height;
   const newAspect = w > 0 ? (w / h) : 1;
   if (Math.abs(state.camera.aspect - newAspect) > 1e-6) {
     state.camera.aspect = newAspect;

@@ -21,7 +21,7 @@ export const allapot = {
   csill: 0.98,
   tomeg: 3,
   toltes: 4,
-  D: 0.001,
+  D: 0.005,
   kozpont: 500,
   eger: 100,
   eger_z: 0,

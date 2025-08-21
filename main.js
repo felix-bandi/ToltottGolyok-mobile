@@ -12,8 +12,9 @@ import { state } from './core/state.js';
 import { attachTouchControls } from './input/touch.js';
 //import { applyViewportAndCamera } from './Resize.js';
 
-const container = document.getElementById('main');
-initThree({ container });
+onResize();
+state.container = document.getElementById('main');
+initThree({ container: state.container });
 const { scene, camera, renderer } = state;
 attachTouchControls(renderer.domElement, camera);
 
@@ -45,7 +46,7 @@ function tick(t) {
     acc   -= FIXED_DT_SEC;
     steps += 1;
   }
-
+  updateGolyoInstancedMesh();
   updateSpecialMeshes();
   updateLines();
 
@@ -61,8 +62,7 @@ function tick(t) {
     `camera.position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}\n` +
     `camera.aspect: ${camera.aspect.toFixed(3)}\n` +
     `renderer size: ${renderer.domElement.width} x ${renderer.domElement.height}\n` +
-    `container size: ${container.clientWidth} x ${container.clientHeight}\n` +
-    `kozpont: ${golyok.length > 0 ? `${golyok[0].x.toFixed(2)}, ${golyok[0].y.toFixed(2)}, ${golyok[0].z.toFixed(2)}` : 'n/a'}\n`;
+    `container size: ${state.container?.clientWidth ?? 'n/a'} x ${state.container?.clientHeight ?? 'n/a'}\n`;
 
   renderer.render(scene, camera);
   frameEnd(t);
