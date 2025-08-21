@@ -39,11 +39,12 @@ export function initThree({ container, fov = 60, near = 0.1, far = 2000 }) {
   camera.position.set(0, 0, allapot.tavolsag ?? 500);
   camera.lookAt(0, 0, 0);
   const scene = new THREE.Scene();
+  
   const ambient = new THREE.AmbientLight(0xffffff, 1); // fehér, fél erősségű
   scene.add(ambient);
 
   const directional = new THREE.DirectionalLight(0xffffff, 2);
-  directional.position.set(100, 100, 100);
+  directional.position.set(0,0,500);
   scene.add(directional);
   // Állapot frissítése
   state.dpr = dpr;

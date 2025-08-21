@@ -20,7 +20,7 @@ export function initGolyoInstancedMesh() {
   }
   golyoGeometry = new THREE.SphereGeometry(10, 16, 16);
   golyoMaterial = new THREE.MeshPhysicalMaterial({
-  color: golyoszin,
+  color: "blue",
   roughness: 0.1,
   metalness: 0.0,
   clearcoat: 0.5,
@@ -63,3 +63,4 @@ export function updateGolyoInstancedMesh() {
   golyoInstancedMesh.instanceMatrix.needsUpdate = true;
   golyoMaterial.color.setHex(golyoszin); // Alapértelmezett szín
 }
+
