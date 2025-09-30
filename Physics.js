@@ -5,12 +5,32 @@ const INDUL_GOLYO = 100;
 
 
 let kozpont = { x: 0, y: 0, z: 0, toltes: 0, szin: 0 };
-let eger    = { x: 0, y: 0, z: 0, toltes: 0, szin: 0 };
 
+import * as THREE from 'three';
 import { allapot, state } from './core/state.js';
-import { Golyo, golyok, specialGolyok } from './golyo.js';
+import { Golyo, golyok, specialGolyok, eger } from './golyo.js';
+
+//let prevEgerAktiv = false;
 
 export function szamol(korrekcio) {
+  // Egér pozíciójának frissítése a 3D térben
+  if (eger && eger.aktiv) {
+    const vec = new THREE.Vector3(eger.x, eger.y, 0.5); // 0.5: a kamera és a távoli sík között
+    vec.unproject(state.camera);
+    const dir = vec.sub(state.camera.position).normalize();
+    const distance = -state.camera.position.z / dir.z;
+    const pos = state.camera.position.clone().add(dir.multiplyScalar(distance));
+    eger.x = pos.x;
+    eger.y = pos.y;
+    eger.z = pos.z;
+  } else {
+    // Ha az egér épp most lett inaktív, tegyük "messzire"
+    //eger.x = 10000;
+    //eger.y = 10000;
+    //eger.z = 10000;
+  }
+  //prevEgerAktiv = eger.aktiv;
+
   let a, b, c, k;
   //const N = Math.round((state.MAX_GOLYO - 23) * Math.pow(allapot.N / state.MAX_GOLYO, 2) + 1);
   const prevN = golyok.length;

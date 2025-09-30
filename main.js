@@ -16,7 +16,7 @@ onResize();
 state.container = document.getElementById('main');
 initThree({ container: state.container });
 const { scene, camera, renderer } = state;
-attachTouchControls(renderer.domElement, camera);
+attachTouchControls(renderer.domElement);
 
 onResize();
 //applyViewportAndCamera();

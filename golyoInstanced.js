@@ -5,7 +5,7 @@ import { golyok, kozpont, eger } from './golyo.js';
 let golyoInstancedMesh = null;
 let golyoGeometry = null;
 let golyoMaterial = null;
-let golyoszin = 0xFFffff; // Alapértelmezett szín
+//let golyoszin = 0xFFffff; // Alapértelmezett szín
 
 export function initGolyoInstancedMesh() {
   if (golyoInstancedMesh) {
@@ -20,9 +20,9 @@ export function initGolyoInstancedMesh() {
   }
   golyoGeometry = new THREE.SphereGeometry(10, 16, 16);
   golyoMaterial = new THREE.MeshPhysicalMaterial({
-  color: "blue",
-  roughness: 0.1,
-  metalness: 0.0,
+  color: 0x557799,
+  roughness: 0.5,
+  metalness: 0.5,
   clearcoat: 0.5,
   clearcoatRoughness: 0.1,
   reflectivity: 1.0,
@@ -34,10 +34,10 @@ export function initGolyoInstancedMesh() {
   eger.toltes = allapot.eger;
   
   eger.z = allapot.eger_z;
-  const r = 0;
-  const g = allapot.toltes / state.MAX_GOLYO * 255;
-  const b = allapot.toltes / state.MAX_GOLYO * 80;
-  golyoszin = (r << 16) | (g << 8) | b;
+  //const r = 0;
+  //const g = allapot.toltes / state.MAX_GOLYO * 255;
+  //const b = allapot.toltes / state.MAX_GOLYO * 80;
+  //golyoszin = (r << 16) | (g << 8) | b;
   state.camera.fov = allapot.fov;
   state.camera.position.set(0, 0, allapot.tavolsag);
   state.camera.updateProjectionMatrix();
@@ -61,6 +61,6 @@ export function updateGolyoInstancedMesh() {
   }
   golyoInstancedMesh.count = golyok.length;
   golyoInstancedMesh.instanceMatrix.needsUpdate = true;
-  golyoMaterial.color.setHex(golyoszin); // Alapértelmezett szín
+  //golyoMaterial.color.setHex(golyoszin); // Alapértelmezett szín
 }
 
