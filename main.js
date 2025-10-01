@@ -8,7 +8,7 @@ import { initLines, updateLines } from './line.js';
 import { golyo_init, golyok, eger, e_world } from './golyo.js';
 import { szamol } from './Physics.js';
 import { initThree, onResize } from './core/initThree.js';
-import { state } from './core/state.js';
+import { state, allapot } from './core/state.js';
 import { attachTouchControls } from './input/touch.js';
 //import { applyViewportAndCamera } from './Resize.js';
 
@@ -34,6 +34,24 @@ let last = performance.now();
 
 function tick(t) {
   frameStart(t);
+  // Eltávolítva: if (e_world) e_world.z = allapot.eger_z || 0;  // Physics kezeli a vetítést és a z frissítést
+  if (e_world && eger && eger.aktiv) {
+    const cam = state.camera;
+    if (cam) {
+      const planeZ = (typeof allapot.eger_z === 'number') ? allapot.eger_z : e_world.z;
+      const ndcPoint = new THREE.Vector3(eger.x, eger.y, 0.5).unproject(cam);
+      const dir = ndcPoint.sub(cam.position).normalize();
+      const denom = dir.z;
+      if (Math.abs(denom) > 1e-6) {
+        const tPlane = (planeZ - cam.position.z) / denom;
+        if (tPlane > 0) {
+          e_world.x = cam.position.x + dir.x * tPlane;
+          e_world.y = cam.position.y + dir.y * tPlane;
+        }
+      }
+    }
+  }
+
   // időkülönbség felhalmozása
   const dt = (t - last) / 1000;
   last = t;
@@ -58,14 +76,14 @@ function tick(t) {
     debug.style.cssText = 'position:fixed;bottom:0;left:0;z-index:99999;background:rgba(0,0,0,0.7);color:#fff;font-size:12px;padding:6px;max-width:100vw;max-height:40vh;overflow:auto;pointer-events:none;';
     document.body.appendChild(debug);
   }
-  debug.textContent =
+  /*debug.textContent =
     `camera.position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}\n` +
     `camera.aspect: ${camera.aspect.toFixed(3)}\n` +
     `renderer size: ${renderer.domElement.width} x ${renderer.domElement.height}\n` +
     `container size: ${state.container?.clientWidth ?? 'n/a'} x ${state.container?.clientHeight ?? 'n/a'}\n` +
   `eger(screen): x=${eger.x.toFixed(2)}, y=${eger.y.toFixed(2)}, aktiv=${eger.aktiv || false}\n` +
   `e_world(world): ${e_world.x.toFixed(2)}, ${e_world.y.toFixed(2)}, ${e_world.z.toFixed(2)}\n`;
-
+*/
   renderer.render(scene, camera);
   frameEnd(t);
   updateHud({ fps: getFps(), balls: golyok.length });

@@ -17,7 +17,7 @@ export function initLines() {
   const material = new THREE.LineBasicMaterial({
     vertexColors: true, // <- fontos!
     transparent: true,
-    opacity: 0.8
+    opacity: 0.5
   });
   linesMesh = new THREE.LineSegments(geometry, material);
   state.scene.add(linesMesh);

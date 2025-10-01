@@ -18,7 +18,7 @@ export function initGolyoInstancedMesh() {
   if (golyoMaterial) {
     golyoMaterial.dispose();
   }
-  golyoGeometry = new THREE.SphereGeometry(10, 16, 16);
+  golyoGeometry = new THREE.SphereGeometry(10, 12, 8);
   golyoMaterial = new THREE.MeshPhysicalMaterial({
   color: 0x557799,
   roughness: 0.5,

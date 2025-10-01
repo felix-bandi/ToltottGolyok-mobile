@@ -10,11 +10,18 @@ export function initSpecialMeshes() {
     kozpontMesh.geometry.dispose();
     kozpontMesh.material.dispose();
   }
-  const kozpontGeometry = new THREE.SphereGeometry(12, 16, 16);
-  const kozpontMaterial = new THREE.MeshPhysicalMaterial({ color: 0x44ff00 });
+  const kozpontGeometry = new THREE.SphereGeometry(10, 12, 8);
+  const kozpontMaterial = new THREE.MeshPhysicalMaterial({ 
+    color: 0x44ff00,
+  roughness: 0.5,
+  metalness: 0.5,
+  clearcoat: 0.5,
+  clearcoatRoughness: 0.1,
+  reflectivity: 1.0, 
+  });
   kozpontMesh = new THREE.Mesh(kozpontGeometry, kozpontMaterial);
-  kozpontMesh.castShadow = true;
-  kozpontMesh.receiveShadow = true;
+  kozpontMesh.castShadow = false;
+  kozpontMesh.receiveShadow = false;
   state.scene.add(kozpontMesh);
 
   if (egerMesh) {
@@ -22,11 +29,18 @@ export function initSpecialMeshes() {
     egerMesh.geometry.dispose();
     egerMesh.material.dispose();
   }
-  const egerGeometry = new THREE.SphereGeometry(12, 16, 16);
-  const egerMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+  const egerGeometry = new THREE.SphereGeometry(10, 12, 8);
+  const egerMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xff0000,
+  roughness: 0.5,
+  metalness: 0.5,
+  clearcoat: 0.5,
+  clearcoatRoughness: 0.1,
+  reflectivity: 1.0,
+ });
   egerMesh = new THREE.Mesh(egerGeometry, egerMaterial);
-  egerMesh.castShadow = true;
-  egerMesh.receiveShadow = true;
+  egerMesh.castShadow = false;
+  egerMesh.receiveShadow = false;
   state.scene.add(egerMesh);
 }
 

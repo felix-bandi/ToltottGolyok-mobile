@@ -17,16 +17,16 @@ export const state = {
 
 
 export const allapot = {
-  N: 100,        
+  N: 300,        
   csill: 0.98,
   tomeg: 3,
   toltes: 4,
   D: 0.005,
-  kozpont: 500,
-  eger: 100,
+  kozpont: 1500,
+  eger: 300,
   eger_z: 0,
-  fov: 75,
-  tavolsag: 160
+  fov: 30,
+  tavolsag: 500
 };
 
 // opcionális getter/setterek, ha szeretnéd kontrollálni a beállítást:

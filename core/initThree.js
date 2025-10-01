@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { state, allapot, setThree, setDom } from './state.js';
 import { applyViewportAndCamera } from '../Resize.js';
 
-export function initThree({ container, fov = 60, near = 0.1, far = 2000 }) {
+export function initThree({ container, fov = 60, near = 0.1, far = 3000 }) {
   if (!container) {
     throw new Error('initThree: container szükséges.');
   }
@@ -44,7 +44,7 @@ export function initThree({ container, fov = 60, near = 0.1, far = 2000 }) {
   scene.add(ambient);
 
   const directional = new THREE.DirectionalLight(0xffffff, 2);
-  directional.position.set(0,0,500);
+  directional.position.set(300, 300, 500);
   scene.add(directional);
   // Állapot frissítése
   state.dpr = dpr;

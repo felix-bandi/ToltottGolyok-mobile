@@ -13,20 +13,20 @@ import { Golyo, golyok, specialGolyok, eger, e_world } from './golyo.js';
 //let prevEgerAktiv = false;
 
 export function szamol(korrekcio) {
-  // Képernyő (eger: -1..1) -> világ (e_world) leképezés: sugár metszi a z=0 síkot
-  if (eger && eger.aktiv) {
-    // Két pontra unproject: near (z=0) és far (z=1) a klip térben
+  // Képernyő (eger: -1..1) -> világ (e_world) leképezés: sugár metszi az aktuális slider szerinti z síkot
+  if (eger && eger.aktiv && state.camera) {
+    const targetZ = (typeof allapot.eger_z === 'number') ? allapot.eger_z : (e_world ? e_world.z : 0);
     const near = new THREE.Vector3(eger.x, eger.y, 0).unproject(state.camera);
     const far  = new THREE.Vector3(eger.x, eger.y, 1).unproject(state.camera);
-    const dir = far.sub(near); // irányvektor a sugárhoz
-    // Ha a dir.z túl kicsi (párhuzamos a síkkal), ne frissítsük
+    const dir = far.clone().sub(near);
     if (Math.abs(dir.z) > 1e-6) {
-      const t = -near.z / dir.z; // metszési paraméter z=0 síkkal
-      // Csak akkor fogadjuk el, ha t >= 0 (előre mutat)
+      const t = (targetZ - near.z) / dir.z;
       if (t >= 0) {
-        e_world.x = near.x + dir.x * t;
-        e_world.y = near.y + dir.y * t;
-        e_world.z = 0; // fix sík
+        if (e_world) {
+          e_world.x = near.x + dir.x * t;
+          e_world.y = near.y + dir.y * t;
+          e_world.z = targetZ; // slider szerinti sík
+        }
       }
     }
   }
