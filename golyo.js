@@ -19,7 +19,7 @@ export class Golyo {
   }
 }
 
-export let golyok = [], szalhossz = [], specialGolyok = [], kozpont, eger ;
+export let golyok = [], szalhossz = [], specialGolyok = [], kozpont, eger, e_world ;
 
 export function golyo_init() {
   golyok.length = 0;
@@ -45,11 +45,15 @@ export function golyo_init() {
   kozpont.toltes = allapot.kozpont;
   kozpont.szin = 0x222222;
   specialGolyok.push(kozpont);
-  eger = new Golyo();
-  eger.x = 0;
-  eger.y = 0;
-  eger.z = 0;
-  eger.toltes = allapot.eger;
-  eger.szin = 0x222222;
-  specialGolyok.push(eger);
+  // eger: csak képernyő koordináta (-1..1), NEM része a specialGolyok fizikai mezőnek
+  eger = { x: 0, y: 0, aktiv: false }; // nincs z itt, mert képernyő tér
+
+  // e_world: a világban létező megfelelő (fizikához)
+  e_world = new Golyo();
+  e_world.x = 0;
+  e_world.y = 0;
+  e_world.z = 0;
+  e_world.toltes = allapot.eger;
+  e_world.szin = 0x222222;
+  specialGolyok.push(e_world);
 }

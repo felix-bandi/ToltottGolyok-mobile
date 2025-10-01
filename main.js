@@ -5,7 +5,7 @@ import { initHud, updateHud } from './overlay.js';
 import { initGolyoInstancedMesh, updateGolyoInstancedMesh } from './golyoInstanced.js';
 import { initSpecialMeshes, updateSpecialMeshes } from './specialMeshes.js';
 import { initLines, updateLines } from './line.js';
-import { golyo_init, golyok } from './golyo.js';
+import { golyo_init, golyok, eger, e_world } from './golyo.js';
 import { szamol } from './Physics.js';
 import { initThree, onResize } from './core/initThree.js';
 import { state } from './core/state.js';
@@ -62,7 +62,9 @@ function tick(t) {
     `camera.position: ${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}\n` +
     `camera.aspect: ${camera.aspect.toFixed(3)}\n` +
     `renderer size: ${renderer.domElement.width} x ${renderer.domElement.height}\n` +
-    `container size: ${state.container?.clientWidth ?? 'n/a'} x ${state.container?.clientHeight ?? 'n/a'}\n`;
+    `container size: ${state.container?.clientWidth ?? 'n/a'} x ${state.container?.clientHeight ?? 'n/a'}\n` +
+  `eger(screen): x=${eger.x.toFixed(2)}, y=${eger.y.toFixed(2)}, aktiv=${eger.aktiv || false}\n` +
+  `e_world(world): ${e_world.x.toFixed(2)}, ${e_world.y.toFixed(2)}, ${e_world.z.toFixed(2)}\n`;
 
   renderer.render(scene, camera);
   frameEnd(t);

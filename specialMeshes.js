@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { state, allapot } from './core/state.js';
-import { golyok, kozpont, eger } from './golyo.js';
+import { golyok, kozpont, eger, e_world } from './golyo.js';
 let kozpontMesh, egerMesh;
 
 export function initSpecialMeshes() {
@@ -27,7 +27,6 @@ export function initSpecialMeshes() {
   egerMesh = new THREE.Mesh(egerGeometry, egerMaterial);
   egerMesh.castShadow = true;
   egerMesh.receiveShadow = true;
-  egerMesh.visible = false; // Alapértelmezetten láthatatlan
   state.scene.add(egerMesh);
 }
 
@@ -35,10 +34,8 @@ export function updateSpecialMeshes() {
   if (kozpontMesh && kozpont) {
     kozpontMesh.position.set(kozpont.x, kozpont.y, kozpont.z);
   }
-  if (egerMesh && eger) {
-    egerMesh.visible = eger.aktiv; // Láthatóság beállítása
-    if (eger.aktiv) {
-      egerMesh.position.set(eger.x, eger.y, eger.z);
+  if (egerMesh && e_world) {
+      egerMesh.position.set(e_world.x, e_world.y, e_world.z);
+      //egerMesh.visible = !!eger?.aktiv;
     }
-  }
 }

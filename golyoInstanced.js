@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { state, allapot } from './core/state.js';
-import { golyok, kozpont, eger } from './golyo.js';
+import { golyok, kozpont, e_world } from './golyo.js';
 
 let golyoInstancedMesh = null;
 let golyoGeometry = null;
@@ -31,9 +31,9 @@ export function initGolyoInstancedMesh() {
 
   state.scene.add(golyoInstancedMesh);
   kozpont.toltes = allapot.kozpont;
-  eger.toltes = allapot.eger;
+  e_world.toltes = allapot.eger;
   
-  eger.z = allapot.eger_z;
+  //eger.z = allapot.eger_z;
   //const r = 0;
   //const g = allapot.toltes / state.MAX_GOLYO * 255;
   //const b = allapot.toltes / state.MAX_GOLYO * 80;

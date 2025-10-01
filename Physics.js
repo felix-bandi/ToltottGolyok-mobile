@@ -8,28 +8,28 @@ let kozpont = { x: 0, y: 0, z: 0, toltes: 0, szin: 0 };
 
 import * as THREE from 'three';
 import { allapot, state } from './core/state.js';
-import { Golyo, golyok, specialGolyok, eger } from './golyo.js';
+import { Golyo, golyok, specialGolyok, eger, e_world } from './golyo.js';
 
 //let prevEgerAktiv = false;
 
 export function szamol(korrekcio) {
-  // Egér pozíciójának frissítése a 3D térben
+  // Képernyő (eger: -1..1) -> világ (e_world) leképezés: sugár metszi a z=0 síkot
   if (eger && eger.aktiv) {
-    const vec = new THREE.Vector3(eger.x, eger.y, 0.5); // 0.5: a kamera és a távoli sík között
-    vec.unproject(state.camera);
-    const dir = vec.sub(state.camera.position).normalize();
-    const distance = -state.camera.position.z / dir.z;
-    const pos = state.camera.position.clone().add(dir.multiplyScalar(distance));
-    eger.x = pos.x;
-    eger.y = pos.y;
-    eger.z = pos.z;
-  } else {
-    // Ha az egér épp most lett inaktív, tegyük "messzire"
-    //eger.x = 10000;
-    //eger.y = 10000;
-    //eger.z = 10000;
+    // Két pontra unproject: near (z=0) és far (z=1) a klip térben
+    const near = new THREE.Vector3(eger.x, eger.y, 0).unproject(state.camera);
+    const far  = new THREE.Vector3(eger.x, eger.y, 1).unproject(state.camera);
+    const dir = far.sub(near); // irányvektor a sugárhoz
+    // Ha a dir.z túl kicsi (párhuzamos a síkkal), ne frissítsük
+    if (Math.abs(dir.z) > 1e-6) {
+      const t = -near.z / dir.z; // metszési paraméter z=0 síkkal
+      // Csak akkor fogadjuk el, ha t >= 0 (előre mutat)
+      if (t >= 0) {
+        e_world.x = near.x + dir.x * t;
+        e_world.y = near.y + dir.y * t;
+        e_world.z = 0; // fix sík
+      }
+    }
   }
-  //prevEgerAktiv = eger.aktiv;
 
   let a, b, c, k;
   //const N = Math.round((state.MAX_GOLYO - 23) * Math.pow(allapot.N / state.MAX_GOLYO, 2) + 1);
