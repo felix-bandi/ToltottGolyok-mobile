@@ -11,7 +11,7 @@ export function attachTouchControls(element) {
   let pinchStartDist = null;
   let startCamDist = null;
   const MIN_DIST = 50;
-  const MAX_DIST = 2000; // 8000 helyett – nem kell messzebb
+  const MAX_DIST = 2000;
 
   function getTouchDistance(t1, t2) {
     const dx = t2.clientX - t1.clientX;

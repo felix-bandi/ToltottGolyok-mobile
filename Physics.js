@@ -52,7 +52,8 @@ export function szamol(korrekcio) {
     let hi = Math.floor(LL / prevN);
     if (hi < 50) hi = 50;
 
-    for (let i = prevN; i < N; ++i) {
+    // FIX: korábban: for (let i = prevN; i < N; ++i)  -> N nem létezett
+    for (let i = prevN; i < allapot.N; ++i) {
       let g = new Golyo();
       let attempts = 0;
       const maxAttempts = 100; // Korlátozzuk a próbálkozások számát
@@ -69,19 +70,16 @@ export function szamol(korrekcio) {
         for (let j = 0; j < i && valid; ++j) { // Early break optimalizáció
           let rx = g.x - golyok[j].x;
           let ry = g.y - golyok[j].y;
-          let rz = g.z - golyok[j].z;
+            let rz = g.z - golyok[j].z;
           let L = Math.sqrt(rx * rx + ry * ry + rz * rz);
           if (L < 10) {
             valid = false;
           }
         }
         attempts++;
-        //console.log(`Attempt ${attempts}: Golyó ${i} pozíció: (${g.x.toFixed(2)}, ${g.y.toFixed(2)}, ${g.z.toFixed(2)}) - Valid: ${valid}`);
       } while (!valid && attempts < maxAttempts);
 
-      // Ha túl sok próbálkozás után sem sikerült, akkor elfogadjuk
       if (attempts >= maxAttempts) {
-        //console.warn(`Golyó ${i} pozíciója nem érvényes, de elfogadva:`, g);
         valid = true;
       }
 
