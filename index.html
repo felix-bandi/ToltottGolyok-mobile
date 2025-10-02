@@ -12,7 +12,11 @@
     #hud{position:fixed;top:8px;left:8px;z-index:9999;color:#ddd;background:rgba(0,0,0,.35);padding:6px 8px;border-radius:8px;font:12px/1.3 system-ui,Segoe UI,Roboto,Arial,sans-serif;pointer-events:none;user-select:none}
     #controls{position:fixed;left:0;right:0;z-index:10000;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);padding:12px 14px;display:flex;flex-direction:column;gap:12px;align-items:stretch;font:12px system-ui;color:#eee;box-sizing:border-box}
     #controls label{display:flex;flex-direction:column;gap:6px;width:100%;flex:0 0 auto;min-width:0}
-    #controls input[type=range]{width:100%;box-sizing:border-box}
+    #controls input[type=range]{width:92%;margin:0 4%;box-sizing:border-box}
+    /* Mobil hosszú nyomás / szöveg kijelölés tiltása a csúszkáknál */
+    html,body,#controls,#controls label,#controls input[type=range]{
+      -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+    }
   </style>
 
   <!-- vendor a webgyökér testvérmappájában -->
@@ -75,6 +79,12 @@
     function positionControls(){ const vp = state.viewport; const el = document.getElementById('controls'); if(!el) return; if(vp){ el.style.top = vp.h + 'px'; } }
     window.addEventListener('resize', positionControls);
     setInterval(positionControls, 250);
+    const controlsEl = document.getElementById('controls');
+    if (controlsEl) {
+      controlsEl.addEventListener('contextmenu', e=>{ e.preventDefault(); }, {passive:false});
+      // Android néha hosszú nyomás után még select start: tiltjuk
+      ['selectstart','dragstart'].forEach(ev=>controlsEl.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+    }
   </script>
 </body>
 </html>

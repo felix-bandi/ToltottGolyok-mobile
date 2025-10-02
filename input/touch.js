@@ -12,6 +12,14 @@ export function attachTouchControls(element) {
   let startCamDist = null;
   const MIN_DIST = 50;
   const MAX_DIST = 2000;
+  const SINGLE_FINGER_DELAY = 60; // kicsit rövidebb
+  let singleFingerTimer = null;
+  let pendingNDC = null; // ideiglenes tároló az első ujj koordinátájának
+
+  function clearSingleTimer() {
+    if (singleFingerTimer) { clearTimeout(singleFingerTimer); singleFingerTimer = null; }
+    // NE nullázzuk itt a pendingNDC-t, mert kell az aktiváláshoz
+  }
 
   function getTouchDistance(t1, t2) {
     const dx = t2.clientX - t1.clientX;
@@ -30,7 +38,6 @@ export function attachTouchControls(element) {
   function projectToPlane(ndcX, ndcY) {
     if (!state.camera) return;
     const cam = state.camera;
-    // Használjuk az aktuális e_world.z értéket; ha nincs, fallback a sliderre
     const planeZ = (e_world && typeof e_world.z === 'number') ? e_world.z : allapot.eger_z;
     const p = new THREE.Vector3(ndcX, ndcY, 0.5).unproject(cam);
     const dir = p.sub(cam.position).normalize();
@@ -45,22 +52,31 @@ export function attachTouchControls(element) {
     }
   }
 
+  function activateSingleFinger(ndc) {
+    if (!ndc || !ndc.inside) return;
+    eger.x = ndc.x;
+    eger.y = ndc.y;
+    eger.aktiv = true;
+    projectToPlane(eger.x, eger.y);
+  }
+
   function onTouchStart(e) {
     if (e.touches.length === 1) {
+      // Előbb töröljük az esetleges régi timert, UTÁNA állítjuk a pendingNDC-t
+      clearSingleTimer();
       const touch = e.touches[0];
-      const ndc = screenToNDC(touch.clientX, touch.clientY);
-      if (ndc.inside) {
-        eger.x = ndc.x;
-        eger.y = ndc.y;
-        eger.aktiv = true;
-        projectToPlane(eger.x, eger.y);
-      } else {
-        eger.aktiv = false;
-      }
+      pendingNDC = screenToNDC(touch.clientX, touch.clientY);
+      singleFingerTimer = setTimeout(() => {
+        singleFingerTimer = null;
+        activateSingleFinger(pendingNDC);
+      }, SINGLE_FINGER_DELAY);
     } else if (e.touches.length === 2) {
+      // Második ujj gyorsan érkezett: pinch mód, ne mozgassuk az egeret
+      clearSingleTimer();
+      pendingNDC = null; // pinch -> nincs függőben
       pinchStartDist = getTouchDistance(e.touches[0], e.touches[1]);
       startCamDist = allapot.tavolsag || Math.abs(state.camera?.position.z || 500);
-      eger.aktiv = false; // kétujjasnál ne mozgassuk a "egér" pontot
+      eger.aktiv = false;
     }
     e.preventDefault();
   }
@@ -69,16 +85,21 @@ export function attachTouchControls(element) {
     if (e.touches.length === 1 && pinchStartDist == null) {
       const touch = e.touches[0];
       const ndc = screenToNDC(touch.clientX, touch.clientY);
-      if (ndc.inside) {
+      if (singleFingerTimer) {
+        // Még várakozunk: frissítjük a pending pozíciót
+        pendingNDC = ndc;
+      } else if (eger.aktiv && ndc.inside) {
         eger.x = ndc.x;
         eger.y = ndc.y;
         projectToPlane(eger.x, eger.y);
       }
     } else if (e.touches.length === 2) {
+      // Pinch közben biztosan nem mozgatjuk az egeret
+      clearSingleTimer();
       const d = getTouchDistance(e.touches[0], e.touches[1]);
       if (pinchStartDist && startCamDist) {
-        const ratio = d / pinchStartDist; // nagyobb => közelebb akarunk menni
-        const newDist = startCamDist / ratio; // pinch kifelé => ratio>1 => kisebb távolság
+        const ratio = d / pinchStartDist;
+        const newDist = startCamDist / ratio;
         applyCameraDistance(newDist);
       }
     }
@@ -91,7 +112,20 @@ export function attachTouchControls(element) {
       startCamDist = null;
     }
     if (e.touches.length === 0) {
+      clearSingleTimer();
+      pendingNDC = null;
       eger.aktiv = false;
+    } else if (e.touches.length === 1) {
+      // Ha pinchből maradt egy ujj: indítsunk új rövid késleltetést újraaktiválásra
+      if (!eger.aktiv) {
+        clearSingleTimer();
+        const touch = e.touches[0];
+        pendingNDC = screenToNDC(touch.clientX, touch.clientY);
+        singleFingerTimer = setTimeout(() => {
+          singleFingerTimer = null;
+          activateSingleFinger(pendingNDC);
+        }, SINGLE_FINGER_DELAY);
+      }
     }
   }
 
@@ -102,6 +136,8 @@ export function attachTouchControls(element) {
 
   // lecsatoló
   return () => {
+    clearSingleTimer();
+    pendingNDC = null;
     element.removeEventListener('touchstart', onTouchStart);
     element.removeEventListener('touchmove',  onTouchMove);
     element.removeEventListener('touchend',   onTouchEnd);
