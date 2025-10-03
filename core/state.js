@@ -19,6 +19,7 @@ export const state = {
 export const allapot = {
   N: 300,        
   csill: 0.98,
+  csill_tang: 1.0, // tangenciális komponens csillapítás (1=nem csillapít)
   tomeg: 3,
   toltes: 4,
   D: 0.005,

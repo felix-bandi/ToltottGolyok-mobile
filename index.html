@@ -42,7 +42,13 @@
       <input id="slider-eger-toltes" type="range" min="0" max="3000" step="10" />
     </label>
     <label>Rugó állandó D
-      <input id="slider-rugo" type="range" min="0" max="0.05" step="0.0005" />
+      <input id="slider-rugo" type="range" min="0.001" max="0.05" step="0.0005" />
+    </label>
+    <label>Tangenciális csillapítás <span id="val-csill-tang"></span>
+      <input id="slider-csill-tang" type="range" min="0" max="1" step="0.001" />
+    </label>
+    <label>Radiális csillapítás <span id="val-csill-rad"></span>
+      <input id="slider-csill-rad" type="range" min="0" max="1" step="0.001" />
     </label>
     <label>Golyók száma
       <input id="slider-golyok" type="range" min="1" max="500" step="1" />
@@ -59,23 +65,60 @@
     const sliderE = document.getElementById('slider-eger-toltes');
     const sliderR = document.getElementById('slider-rugo');
     const sliderN = document.getElementById('slider-golyok');
+    const sliderTang = document.getElementById('slider-csill-tang');
+    const sliderRad = document.getElementById('slider-csill-rad');
+    const valTang   = document.getElementById('val-csill-tang');
+    const valRad    = document.getElementById('val-csill-rad');
+
+    // Log tartományok (állíthatod kedved szerint):
+    const CSILL_TANG_MIN = 0.90, CSILL_TANG_MAX = 1.00;
+    const CSILL_RAD_MIN  = 0.80, CSILL_RAD_MAX  = 1.00;
+
+    function toSlider(v, vmin, vmax){
+      if (v <= vmin) return 0;
+      if (v >= vmax) return 1;
+      const lnMin = Math.log(vmin);
+      const lnMax = Math.log(vmax);
+      return (Math.log(v) - lnMin) / (lnMax - lnMin);
+    }
+    function fromSlider(t, vmin, vmax){
+      const lnMin = Math.log(vmin);
+      const lnMax = Math.log(vmax);
+      return Math.exp(lnMin + t * (lnMax - lnMin));
+    }
     // Inicializálás jelenlegi állapottal
     sliderZ.value = allapot.eger_z;
     sliderK.value = allapot.kozpont;
     sliderE.value = allapot.eger;
     sliderR.value = allapot.D;
     sliderN.value = allapot.N;
+  sliderTang.value = toSlider(allapot.csill_tang, CSILL_TANG_MIN, CSILL_TANG_MAX);
+  sliderRad.value  = toSlider(allapot.csill,     CSILL_RAD_MIN,  CSILL_RAD_MAX);
     function applyZ(v){ allapot.eger_z = +v; if (e_world) e_world.z = allapot.eger_z; }
     function applyK(v){ allapot.kozpont = +v; if (kozpont) kozpont.toltes = allapot.kozpont; }
     function applyE(v){ allapot.eger = +v; if (e_world) e_world.toltes = allapot.eger; }
     function applyR(v){ allapot.D = +v; }
     function applyN(v){ allapot.N = +v; }
+    function applyTang(t){
+      const val = fromSlider(+t, CSILL_TANG_MIN, CSILL_TANG_MAX);
+      allapot.csill_tang = val;
+      if (valTang) valTang.textContent = val.toFixed(4);
+    }
+    function applyRad(t){
+      const val = fromSlider(+t, CSILL_RAD_MIN, CSILL_RAD_MAX);
+      allapot.csill = val;
+      if (valRad) valRad.textContent = val.toFixed(4);
+    }
     sliderZ.addEventListener('input', e=>applyZ(e.target.value));
     sliderK.addEventListener('input', e=>applyK(e.target.value));
     sliderE.addEventListener('input', e=>applyE(e.target.value));
     sliderR.addEventListener('input', e=>applyR(e.target.value));
     sliderN.addEventListener('input', e=>applyN(e.target.value));
-    applyZ(sliderZ.value); applyK(sliderK.value); applyE(sliderE.value); applyR(sliderR.value); applyN(sliderN.value);
+  sliderTang.addEventListener('input', e=>applyTang(e.target.value));
+  sliderRad.addEventListener('input', e=>applyRad(e.target.value));
+  applyZ(sliderZ.value); applyK(sliderK.value); applyE(sliderE.value); applyR(sliderR.value); applyN(sliderN.value); applyTang(sliderTang.value); applyRad(sliderRad.value);
+  if (valTang) valTang.textContent = (+allapot.csill_tang).toFixed(4);
+  if (valRad)  valRad.textContent  = (+allapot.csill).toFixed(4);
     function positionControls(){ const vp = state.viewport; const el = document.getElementById('controls'); if(!el) return; if(vp){ el.style.top = vp.h + 'px'; } }
     window.addEventListener('resize', positionControls);
     setInterval(positionControls, 250);

@@ -131,15 +131,41 @@ export function szamol(korrekcio) {
       golyok[j].Fz -= Fz;
     }
   const tomeg = allapot.tomeg / korrekcio;
+  // Új integráció: csak a rugó (origó felé mutató) irányú sebesség komponens csillapodik.
+  // Fizikai modell: erők -> gyorsulás, majd sebességfrissítés, aztán radiális komponens * csill, tangenciális szabadon marad.
   for (const g of golyok) {
-    g.vx -= (allapot.D * g.x + g.Fx) / tomeg;
-    g.vx *= allapot.csill;
+    // Gyorsulás (Hooke + elektromos): a = -(D * x + Fx) / m  stb.
+    const ax = -(allapot.D * g.x + g.Fx) / tomeg;
+    const ay = -(allapot.D * g.y + g.Fy) / tomeg;
+    const az = -(allapot.D * g.z + g.Fz) / tomeg;
+
+    g.vx += ax;
+    g.vy += ay;
+    g.vz += az;
+
+    // Radiális irány v_r = (v · r̂) r̂, ahol r̂ = r / |r|. Ezt csillapítjuk.
+    const rx = g.x, ry = g.y, rz = g.z;
+    const r2 = rx*rx + ry*ry + rz*rz;
+    if (r2 > 1e-9) {
+      const rInv = 1 / Math.sqrt(r2);
+      const ux = rx * rInv, uy = ry * rInv, uz = rz * rInv; // r̂
+      const vr = g.vx * ux + g.vy * uy + g.vz * uz; // skalár radiális sebesség
+      // Teljes sebesség = radiális + tangenciális. Tangenciális = v - vr*r̂
+      const vx_t = g.vx - vr * ux;
+      const vy_t = g.vy - vr * uy;
+      const vz_t = g.vz - vr * uz;
+      // Csillapítások
+      const vrNew = vr * allapot.csill;
+      const tangScale = allapot.csill_tang;
+      // Új komponensek összerakása
+      g.vx = vrNew * ux + vx_t * tangScale;
+      g.vy = vrNew * uy + vy_t * tangScale;
+      g.vz = vrNew * uz + vz_t * tangScale;
+    }
+
+    // Pozíció frissítés
     g.x += g.vx;
-    g.vy -= (allapot.D * g.y + g.Fy) / tomeg;
-    g.vy *= allapot.csill;
     g.y += g.vy;
-    g.vz -= (allapot.D * g.z + g.Fz) / tomeg;
-    g.vz *= allapot.csill;
     g.z += g.vz;
   }
 }
